@@ -358,14 +358,22 @@ class Main:
         elif answer == "2":
           exit()
 
+
+    #Results file initiatlizing
+    resultsfile = os.path.join(self.TMPDIR, "results.html")
+    resultsobj = open(resultsfile, "w")
+    resultsobj.write("<html><head><title>Results</title></head><p>List not in order of relevance.<br><br>")
+
     #Make all matched db entries into html files
     if action == "all":
       for dbentry in matches:
         htmlfile = os.path.join(self.TMPDIR, dbentry[2] + "-" + str(dbentry[0]) + ".html")
         fileobj = open(htmlfile, "w")
-        title = "<title>" + dbentry[3].encode("latin-1", "replace") + "</title>\n"
+        title = dbentry[3].encode("latin-1", "replace")
+        titletagged = "<title>" + title + "</title>\n"
         content = dbentry[4].encode("latin-1", "replace") 
-        fileobj.write(title + content)
+        resultsobj.write(dbentry[2] + " - <a href=" + htmlfile + ">" + title + "</a><br><br>")
+        fileobj.write(titletagged + content)
         fileobj.close()
     
     #Make MATCHLIMIT number of html files by equally spacing out the db entries
@@ -375,16 +383,25 @@ class Main:
       for num in range(0, matchnum, jump):
         htmlfile = os.path.join(self.TMPDIR, matches[num][2] + "-" + str(matches[num][0]) + ".html") 
         fileobj = open(htmlfile, "w")
-        title = "<title>" + matches[num][3].encode("latin-1", "replace") + "</title>\n"
+        title = matches[num][3].encode("latin-1", "replace")
+        titletagged = "<title>" + title + "</title>\n"
         content = matches[num][4].encode("latin-1", "replace") 
-        fileobj.write(title + content)
+        resultsobj.write(matches[num][2] + " - <a href=" + htmlfile + ">" + title + "</a><br><br>")
+        fileobj.write(titletagged + content)
         fileobj.close()
         iter += 1
         if iter == self.MATCHLIMIT:
           break
 
+    #Results file closing
+    resultsobj.write("</html>")
+    resultsobj.close()
+    
     #Open with firefox
-    os.system("firefox " + os.path.join(self.TMPDIR, "*") + " >/dev/null 2>&1 &")
+    #os.system("firefox " + os.path.join(self.TMPDIR, "*") + " >/dev/null 2>&1 &")
+    import webbrowser
+    webbrowser.open(os.path.join(self.TMPDIR, resultsfile), new=2)
+    
 
 
 
