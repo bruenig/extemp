@@ -34,11 +34,11 @@ def update():
   total = len(updatepaper.scrapefiles)
   for num, file in enumerate(updatepaper.scrapefiles):
     for line in file:
-      if '>Print<' in line:
-        actualurls.append(beginurl + line.split('"')[1])
+      if 'articletools-print' in line:
+        actualurls.append(beginurl + line.split('"')[3])
         actualtitles.append(updatepaper.scrapetitles[num])
         break
-
+  
   #Download the scraped links
   updatepaper.download(paper, actualurls, actualtitles)
 
