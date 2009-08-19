@@ -31,7 +31,6 @@ def update():
   actualurls = []
   actualtitles = []
   beginurl = "http://www.latimes.com"
-  total = len(updatepaper.scrapefiles)
   for num, file in enumerate(updatepaper.scrapefiles):
     for line in file:
       if 'articletools-print' in line:
