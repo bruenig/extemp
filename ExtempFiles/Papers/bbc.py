@@ -35,12 +35,9 @@ def update():
         append = "no"
         break
 
-    if append == "yes":
-      splitlink = link.split("/")
-      beginnum = splitlink.index("-") + 1
-      actualurl = beginurl
-      for urlchunk in splitlink[beginnum:]:
-        actualurl = actualurl + "/" + urlchunk
+    if append == "yes" and ".stm" in link:
+      splitlink = link.split("/-/")
+      actualurl = beginurl + "/" + splitlink[1]
       actualurls.append(actualurl)
       actualtitles.append(title)
 
