@@ -2,8 +2,7 @@ from ExtempFiles.update import MainUpdate
 
 def update():
   paper = "chicagotribune"
-  feeds = ("http://feeds.chicagotribune.com/chicagotribune/news/nationworld/",
-           "http://feeds.chicagotribune.com/chicagotribune/news/nationworld/")
+  feeds = ("http://feeds.chicagotribune.com/chicagotribune/news/nationworld/",)
 
   #Get links and titles from parsing
   updatepaper = MainUpdate()
@@ -27,11 +26,10 @@ def update():
   total = len(updatepaper.scrapefiles)
   for num, file in enumerate(updatepaper.scrapefiles):
     for line in file:
-      if 'alt="Print"' in line:
-        actualurls.append(beginurl + line.split('"')[5])
+      if 'articletools-print' in line:
+        actualurls.append(beginurl + line.split('"')[3])
         actualtitles.append(updatepaper.scrapetitles[num])
         break
-
 
   #Download the scraped links
   updatepaper.download(paper, actualurls, actualtitles)
