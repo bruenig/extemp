@@ -333,8 +333,10 @@ class Main:
     print("\n" + str(matchnum) + " matches, what do you want to do?\n")
     if matchnum > self.MATCHLIMIT:
       print("1. Open all " + str(matchnum) + " of them.")
-      print("2. Open " + str(self.MATCHLIMIT) + " of them.")
-      print("3. Open none of them.")
+      print("2. Open the " + str(self.MATCHLIMIT) + " most recent articles.")
+      print("3. Open the " + str(self.MATCHLIMIT) + " oldest articles.")
+      print("4. Open the " + str(self.MATCHLIMIT) + " from biggest variety of papers.")
+      print("5. Open none of them.")
       print("")
       while True:
         answer = raw_input("Option Number: ")
@@ -342,9 +344,15 @@ class Main:
           action = "all"
           break
         elif answer == "2":
-          action = "limit"
+          action = "recent"
           break
         elif answer == "3":
+          action = "old"
+          break
+        elif answer == "4":
+          action = "limit"
+          break
+        elif answer == "5":
           exit()
     else:
       print("1. Open them.")
@@ -383,10 +391,28 @@ class Main:
         if iter == self.MATCHLIMIT:
           break
 
+    elif action == "recent":
+      matches.sort(lambda x,y:cmp(y[1],x[1]))
+      for num in range(0, self.MATCHLIMIT):
+        htmlfile = os.path.join(self.TMPDIR, matches[num][2] + "-" + str(matches[num][0]) + ".html") 
+        fileobj = open(htmlfile, "w")
+        title = "<title>" + matches[num][3].encode("latin-1", "replace") + "</title>\n"
+        content = matches[num][4].encode("latin-1", "replace") 
+        fileobj.write(title + content)
+        fileobj.close()
+
+    elif action == "old":
+      matches.sort(lambda x,y:cmp(x[1],y[1]))
+      for num in range(0, self.MATCHLIMIT):
+        htmlfile = os.path.join(self.TMPDIR, matches[num][2] + "-" + str(matches[num][0]) + ".html") 
+        fileobj = open(htmlfile, "w")
+        title = "<title>" + matches[num][3].encode("latin-1", "replace") + "</title>\n"
+        content = matches[num][4].encode("latin-1", "replace") 
+        fileobj.write(title + content)
+        fileobj.close()
+
     #Open with firefox
     os.system("firefox " + os.path.join(self.TMPDIR, "*") + " >/dev/null 2>&1 &")
-
-
 
   #Download database snapshot from internet and extract it
   def sync(self):
