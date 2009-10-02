@@ -1,8 +1,9 @@
 from ExtempFiles.update import MainUpdate
 
 def update():
-  paper = "chicagotribune"
-  feeds = ("http://feeds.chicagotribune.com/chicagotribune/news/nationworld/",)
+  paper = "politico"
+  feeds = ("http://www.politico.com/rss/congress.xml",
+           "http://www.politico.com/rss/politics.xml")
 
   #Get links and titles from parsing
   updatepaper = MainUpdate()
@@ -22,11 +23,10 @@ def update():
   #Get printable urls
   actualurls = []
   actualtitles = []
-  beginurl = "http://www.chicagotribune.com"
   for num, file in enumerate(updatepaper.scrapefiles):
     for line in file:
-      if 'articletools-print' in line:
-        actualurls.append(beginurl + line.split('"')[3])
+      if 'shr-print' in line:
+        actualurls.append(line.split('"')[3])
         actualtitles.append(updatepaper.scrapetitles[num])
         break
 
